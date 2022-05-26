@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Sitios</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <b:commandButton value="Agregar" type="button" onclick="PF('agregar').show()" class="btn btn-success" style="margin: 10px"/>
+        </h:form>
+        <p:panel>
+            <p:dialog header="Agregar" widgetVar="agregar" modal="true" width="60%">
+                <p:panelGrid columns="1" style="width: 50%; margin: auto; text-align: center;">
+                    <h:form id="form_sitios">
+                        <h:outputText value="Registro de sitios visitados"/>
+                        <p:panelGrid columns="2" style="text-align: left">
+                            <h:outputText value="Nombre del Sitio"/>
+                            <h:inputText value="#{sitioControlador.sitio.nombre}"
+                                         required="true" requiredMessage="Nombre Requerido"/>
+                            <h:outputText value="Direccion"/>
+                            <h:inputText value="#{sitioControlador.sitio.direccion}"
+                                         required="true" requiredMessage="Direccion Requerida"/>
+                            <h:outputText value="Fotografia(URL)"/>
+                            <h:inputText value="#{sitioControlador.sitio.fotografia}"
+                                         required="true" requiredMessage="URL Necesaria"/>
+                            <h:outputText value="Categoria"/>
+                            <p:selectOneMenu value="#{sitioControlador.sitio.categoriaID.categoriaId}"
+                                             filter="true" filterMatchMode="startsWith">
+                                <f:selectItems var="categoria" value="#{sitioControlador.listCategorias}" 
+                                               itemLabel="#{categoria.nombreCategoria}"
+                                               itemValue="#{categoria.categoriaId}" />
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+                        <b:commandButton action="#{sitioControlador.guardarSitio()}" value="Guardar">
+                            <f:ajax execute="@form" render="sitios_table form_sitios"/>
+                        </b:commandButton>
+                        <h:messages />
+                    </h:form>
+                </p:panelGrid>
+            </p:dialog>
+
+            <b:dataTable id="sitios_table" var="Sit"
+                         value="#{sitioControlador.listSitios}" >
+                <b:dataTableColumn label="ID" value="#{Sit.id}"/>
+                <b:dataTableColumn label="Nombre" value="#{Sit.nombre}"/>
+                <b:dataTableColumn label="Direccion" value="#{Sit.direccion}"/>
+                <b:dataTableColumn label="Categoria" value="#{Sit.categoriaID.nombreCategoria}"/>
+                <b:dataTableColumn label="Fotografia">
+                    <img src="#{Sit.fotografia}" width="150" height="100"></img>
+                </b:dataTableColumn>
+            </b:dataTable>
+        </p:panel>
+    </h:body>
+</html>
+
